@@ -1,18 +1,31 @@
-import akka.actor.ActorSystem
+import akka.actor._
+import akka.routing.{FromConfig, BroadcastRouter}
 import akka.util.duration._
+
+class ListenerActor extends Actor {
+  protected def receive = {
+    case s => println("local received " + s)
+  }
+}
+
+class DummyActor extends Actor {
+  protected def receive = {
+    case s => println("dummy receieved " + s)
+  }
+}
 
 object Publisher extends App {
   val system = ActorSystem("publisher")
 
-  val remoteActor = system.actorFor("akka://receiever@localhost:3000/user/test1")
+  val bcActor = system.actorOf(Props.empty.withRouter(FromConfig()), name = "broadcast")
 
   var count = 0
 
   println("press enter to stop")
 
-  system.scheduler.schedule(1 second, 5 seconds) {
+  system.scheduler.schedule(1 second, 1 seconds) {
     count += 1
-    remoteActor ! ("Hello " + count)
+    bcActor ! Map("Hello" -> count, "World" -> "cruel")
   }
   
   Console.readLine()
