@@ -8,7 +8,7 @@ class ListenerActor extends Actor {
 }
 
 object Listener extends App {
-  val system = ActorSystem("receiever")
+  val system = ActorSystem("receiver")
 
   val theListener = system.actorOf(Props[ListenerActor], "test1")
 

@@ -17,7 +17,7 @@ class DummyActor extends Actor {
 object Publisher extends App {
   val system = ActorSystem("publisher")
 
-  val bcActor = system.actorOf(Props.empty.withRouter(FromConfig()), name = "broadcast")
+  val bcActor = system.actorOf(Props.empty.withRouter(FromConfig()).withDispatcher("blah"), name = "broadcast")
 
   var count = 0
 
